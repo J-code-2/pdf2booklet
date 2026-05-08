@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PDF Cut-Stack Rearranger</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="topbar">
+        <div class="brand">pdf2booklet</div>
+        <div class="topbar-actions">
+          <span class="topbar-chip" id="topbar-chip">Lokal im Browser-Workflow</span>
+          <label for="language-select" class="visually-hidden">Language</label>
+          <select id="language-select" class="language-select">
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="fr">🇫🇷 Francais</option>
+            <option value="ar">🇸🇦 العربية</option>
+          </select>
+        </div>
+      </header>
+
+      <section class="hero hero-grid">
+        <div class="hero-main">
+          <p class="badge" id="hero-badge">Schnell. Sicher. Druckbereit.</p>
+          <h1 id="hero-title">PDF-Seiten professionell fuer Booklets anordnen</h1>
+          <p class="subtitle" id="hero-subtitle">
+            Lade eine PDF hoch und erhalte in Sekunden ein sauber aufbereitetes Drucklayout fuer
+            Schneiden, Stapeln oder Falzen - ohne Cloud-Upload.
+          </p>
+          <div class="hero-highlights">
+            <span id="hero-highlight-1">Keine Registrierung</span>
+            <span id="hero-highlight-2">Lokale Verarbeitung</span>
+            <span id="hero-highlight-3">Live-Vorschau der Seitenlogik</span>
+          </div>
+        </div>
+        <aside class="hero-aside">
+          <h3 id="quickstart-title">Quick Start</h3>
+          <ol>
+            <li id="quickstart-step-1">PDF hochladen</li>
+            <li id="quickstart-step-2">Layout einstellen</li>
+            <li id="quickstart-step-3">Download starten</li>
+          </ol>
+          <p id="quickstart-note">Empfehlung: Split-Stack + Einpassen + Rand 4 mm + Abstand 2 mm.</p>
+        </aside>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <h2 id="section-layout-title">1. Datei & Layout</h2>
+          <span class="section-subtle" id="section-layout-subtle">Alles lokal auf deinem Rechner</span>
+        </div>
+
+        <div id="dropzone" class="dropzone" role="button" tabindex="0">
+          <p id="dropzone-text"><strong>PDF hier ablegen</strong> oder klicken zum Auswaehlen</p>
+          <p id="file-name" class="file-name">Noch keine Datei ausgewaehlt</p>
+          <input id="file-input" type="file" accept="application/pdf,.pdf" hidden />
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="mode-select" id="label-mode-select">Reihenfolge-Modus</label>
+            <select id="mode-select" class="control">
+              <option value="split_stack" id="mode-option-split">
+                Split-Stack (Standard): [1, half+1], [2, half+2], ... ideal fuer Stapel halbieren
+              </option>
+              <option value="reverse_right" id="mode-option-reverse">
+                Reverse-Right: [1, N], [2, N-1], ... sinnvoll bei alternativer Ablage-Reihenfolge
+              </option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="fit-mode-select" id="label-fit-mode-select">Skalierung</label>
+            <select id="fit-mode-select" class="control">
+              <option value="contain" id="fit-option-contain">
+                Einpassen (empfohlen): Seiten werden proportional in den Slot skaliert
+              </option>
+              <option value="original" id="fit-option-original">
+                Originalgroesse: keine Skalierung, moegliches Abschneiden bei grossen Seiten
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="margin-mm" id="label-margin-mm">Aussenrand (mm)</label>
+            <input id="margin-mm" class="control" type="number" min="0" step="0.5" value="4" />
+          </div>
+
+          <div class="field">
+            <label for="gap-mm" id="label-gap-mm">Mittelsteg / Abstand (mm)</label>
+            <input id="gap-mm" class="control" type="number" min="0" step="0.5" value="2" />
+          </div>
+        </div>
+
+        <label class="checkbox-row">
+          <input id="swap-sides" type="checkbox" />
+          <span id="swap-sides-text">Links/Rechts tauschen (nuetzlich, falls Drucker Rueckseiten gespiegelt ausgibt)</span>
+        </label>
+
+        <button id="convert-btn" class="primary-btn" type="button">2. PDF umwandeln</button>
+        <div id="status" class="status" aria-live="polite"></div>
+      </section>
+
+      <section class="features">
+        <article class="feature">
+          <h3 id="feature-1-title">Flexibles Layout</h3>
+          <p id="feature-1-text">Split-Stack, Reverse-Right, Rand- und Abstandssteuerung fuer verschiedene Druckworkflows.</p>
+        </article>
+        <article class="feature">
+          <h3 id="feature-2-title">Kontrollierte Ausgabe</h3>
+          <p id="feature-2-text">Skalierung (Einpassen/Original) plus optionale Seitenvertauschung fuer problemlose Rueckseiten.</p>
+        </article>
+        <article class="feature">
+          <h3 id="feature-3-title">Verstaendliche Visualisierung</h3>
+          <p id="feature-3-text">Sieh vorab exakt, wie Seiten auf Blaetter verteilt und physisch verarbeitet werden.</p>
+        </article>
+      </section>
+
+      <section class="help">
+        <h2 id="help-title">Welche Einstellung soll ich nehmen?</h2>
+        <p id="help-text">
+          Starte mit <strong>Split-Stack + Einpassen + Rand 4 mm + Abstand 2 mm</strong>. Wenn die
+          Reihenfolge nach dem Schneiden nicht passt, probiere zuerst <strong>Reverse-Right</strong>,
+          danach optional <strong>Links/Rechts tauschen</strong>.
+        </p>
+      </section>
+
+      <section class="viz">
+        <div class="section-head">
+          <h2 id="viz-title">Live Visualisierung</h2>
+          <span class="section-subtle" id="viz-subtle">Vor dem Druck pruefen</span>
+        </div>
+        <p class="viz-subtitle" id="viz-subtitle">
+          Hier siehst du live, wie die Seiten auf Blaetter verteilt werden.
+        </p>
+        <div id="viz-stats" class="viz-stats"></div>
+        <div id="viz-pairs" class="viz-pairs"></div>
+      </section>
+
+      <section class="workflow">
+        <h2 id="workflow-title">Anrichte-Vorlagen (beide Formate)</h2>
+        <p class="viz-subtitle" id="workflow-subtitle">
+          Kleine Grafik-Anleitung fuer die physische Verarbeitung nach dem Druck.
+        </p>
+        <div class="workflow-grid">
+          <article class="workflow-card">
+            <div class="workflow-head">
+              <span class="workflow-pill" id="workflow-pill-a">Format A</span>
+              <h3 id="workflow-a-title">Split-Stack: Stapel teilen und aufeinanderlegen</h3>
+            </div>
+            <svg viewBox="0 0 340 120" class="workflow-svg" aria-hidden="true">
+              <circle cx="24" cy="20" r="10" class="wf-step-dot" />
+              <text x="21" y="24" class="wf-step-num">1</text>
+              <rect x="12" y="20" width="54" height="74" rx="6" class="wf-block" />
+              <rect x="18" y="16" width="54" height="74" rx="6" class="wf-block wf-block-2" />
+              <rect x="24" y="12" width="54" height="74" rx="6" class="wf-block wf-block-3" />
+              <text x="24" y="108" class="wf-text">Gesamtstapel</text>
+
+              <circle cx="172" cy="20" r="10" class="wf-step-dot" />
+              <text x="169" y="24" class="wf-step-num">2</text>
+              <path d="M96 50 L132 50" class="wf-arrow" />
+              <path d="M126 44 L132 50 L126 56" class="wf-arrow" />
+
+              <rect x="144" y="24" width="40" height="58" rx="6" class="wf-block" />
+              <rect x="150" y="20" width="40" height="58" rx="6" class="wf-block wf-block-2" />
+              <rect x="198" y="24" width="40" height="58" rx="6" class="wf-block" />
+              <rect x="204" y="20" width="40" height="58" rx="6" class="wf-block wf-block-2" />
+              <text x="148" y="108" class="wf-text">in 2 Haelften teilen</text>
+
+              <circle cx="312" cy="20" r="10" class="wf-step-dot" />
+              <text x="309" y="24" class="wf-step-num">3</text>
+              <path d="M252 50 L288 50" class="wf-arrow" />
+              <path d="M282 44 L288 50 L282 56" class="wf-arrow" />
+
+              <rect x="300" y="26" width="28" height="56" rx="6" class="wf-block" />
+              <rect x="304" y="22" width="28" height="56" rx="6" class="wf-block wf-block-2" />
+              <rect x="308" y="18" width="28" height="56" rx="6" class="wf-block wf-block-3" />
+              <text x="270" y="108" class="wf-text">eine Haelfte auf die andere</text>
+            </svg>
+            <p class="workflow-note" id="workflow-a-note">
+              Ergebnis: korrekte Lesereihenfolge durch Stapeln nach dem Schnitt.
+            </p>
+          </article>
+
+          <article class="workflow-card">
+            <div class="workflow-head">
+              <span class="workflow-pill" id="workflow-pill-b">Format B</span>
+              <h3 id="workflow-b-title">Falz-Buch: In der Mitte knicken</h3>
+            </div>
+            <svg viewBox="0 0 340 120" class="workflow-svg" aria-hidden="true">
+              <circle cx="24" cy="20" r="10" class="wf-step-dot wf-step-dot-green" />
+              <text x="21" y="24" class="wf-step-num">1</text>
+              <rect x="18" y="24" width="124" height="64" rx="8" class="wf-sheet" />
+              <line x1="80" y1="24" x2="80" y2="88" class="wf-fold" />
+              <text x="34" y="56" class="wf-page">L</text>
+              <text x="98" y="56" class="wf-page">R</text>
+              <text x="28" y="108" class="wf-text">Doppelblatt</text>
+
+              <circle cx="244" cy="20" r="10" class="wf-step-dot wf-step-dot-green" />
+              <text x="241" y="24" class="wf-step-num">2</text>
+              <path d="M156 50 L192 50" class="wf-arrow" />
+              <path d="M186 44 L192 50 L186 56" class="wf-arrow" />
+
+              <path d="M230 24 Q220 56 230 88" class="wf-fold-curve" />
+              <rect x="236" y="24" width="48" height="64" rx="8" class="wf-sheet wf-sheet-folded" />
+              <line x1="260" y1="24" x2="260" y2="88" class="wf-fold" />
+              <text x="244" y="108" class="wf-text">mittig falten</text>
+            </svg>
+            <p class="workflow-note" id="workflow-b-note">
+              Ergebnis: gefalztes Heft/Buchblock, anschliessend ineinanderlegen.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
