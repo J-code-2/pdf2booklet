@@ -72,3 +72,5 @@ Recommended starting preset:
 - Scaling: `Einpassen (contain)`
 - Margin: `4 mm`
 - Gap: `2 mm`
+
+<a href="https://pdf2booklet.com">pdf2booklet.com</a>
